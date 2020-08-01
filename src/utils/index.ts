@@ -18,7 +18,9 @@ export interface PostRedirectGetConfig {
 }
 
 /**
+ * Generate an Express validaion chain array and a request handler for POST-redirect-GET
  *
+ * Could be more configurable.
  * @param config Configuration options for generated validator and request handler
  */
 export const postRedirectGet = ({
@@ -38,12 +40,15 @@ export const postRedirectGet = ({
 
       if (errors.isEmpty()) {
         delete req.session.formErrors;
-        res.status(303).location(successPath).send();
+        seeOther(res, successPath);
       } else {
         // Adds dictionary of form errors to session for home view to feedback errors to users
         req.session.formErrors = errors.mapped();
-        res.status(303).location(errorPath).send();
+        seeOther(res, errorPath);
       }
     },
   ];
 };
+
+const seeOther = (res: Response, path: string) =>
+  res.status(303).location(path).send();

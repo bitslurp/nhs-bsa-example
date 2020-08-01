@@ -3,15 +3,15 @@
  */
 
 import { Router } from "express";
-import homeController from "./controllers/home";
+import dataEntryController from "./controllers/data-entry";
 
 const router = Router();
 
 router
   .route("/")
-  .get(homeController.getHomeForm)
-  .post(...homeController.handleFormSubmission);
+  .get(dataEntryController.getDataEntryView)
+  .post(...dataEntryController.postDataEntry);
 
-router.route("/success").get(homeController.getSuccessHandler);
+router.route("/success").get(dataEntryController.getSuccessView);
 
 export default router;

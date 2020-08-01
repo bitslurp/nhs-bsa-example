@@ -3,9 +3,11 @@ import supertest from "supertest";
 import { JSDOM } from "jsdom";
 
 import server from "../src/server";
+import { DataEntryInputName } from "../src/controllers/data-entry";
 
 const { APP_USERNAME, APP_PASSWORD } = process.env;
-describe("GET home form", () => {
+const { inputA } = DataEntryInputName;
+describe("GET data entry form", () => {
   it("should return a 200 status and the form view within the response body", (done) => {
     supertest(server)
       .get("/")
@@ -16,7 +18,7 @@ describe("GET home form", () => {
         // Use JSDOM to make response testing more idiomatic
         const dom = new JSDOM(response.text);
         const inputElement = dom.window.document.getElementById(
-          "input-a"
+          inputA
         ) as HTMLInputElement;
         expect(inputElement).to.exist;
         expect(inputElement.value).to.be.eq("");
@@ -26,16 +28,16 @@ describe("GET home form", () => {
   });
 });
 
-describe("POST home form with invalid input", () => {
+describe("POST entry data with invalid input", () => {
   let request: supertest.SuperTest<supertest.Test>;
   before(() => {
     request = supertest.agent(server);
   });
 
-  it("should return a redirect response to home page because of invalid form input", (done) => {
+  it("should return a redirect response to data entry page because of invalid form input", (done) => {
     request
       .post("/")
-      .send({ "input-a": "0123456789A" })
+      .send({ inputA: "0123456789A" })
       .auth(APP_USERNAME, APP_PASSWORD)
 
       .expect(303)
@@ -52,12 +54,12 @@ describe("POST home form with invalid input", () => {
         const dom = new JSDOM(response.text);
         const { document } = dom.window;
         const inputElement = document.getElementById(
-          "input-a"
+          inputA
         ) as HTMLInputElement;
         expect(inputElement).to.exist;
         expect(inputElement.value).to.be.eq("0123456789A");
 
-        const inputErrorElement = document.getElementById("input-a-error");
+        const inputErrorElement = document.getElementById("inputA-error");
         expect(inputErrorElement.textContent).to.include(
           "be no more than 10 characters"
         );
@@ -74,18 +76,18 @@ describe("POST home form with invalid input", () => {
         const dom = new JSDOM(response.text);
         const { document } = dom.window;
         const inputElement = document.getElementById(
-          "input-a"
+          inputA
         ) as HTMLInputElement;
         expect(inputElement).to.exist;
         expect(inputElement.value).to.be.eq("0123456789A");
 
-        const inputErrorElement = document.getElementById("input-a-error");
+        const inputErrorElement = document.getElementById(`${inputA}-error`);
         expect(inputErrorElement).not.to.exist;
       });
   });
 });
 
-describe("POST home form with valid input", () => {
+describe("POST entry data with valid input", () => {
   const validInputValue = "0123456789";
   let request: supertest.SuperTest<supertest.Test>;
   before(() => {
@@ -95,7 +97,7 @@ describe("POST home form with valid input", () => {
   it("should return a redirect response to success page", (done) => {
     request
       .post("/")
-      .send({ "input-a": validInputValue })
+      .send({ inputA: validInputValue })
       .auth(APP_USERNAME, APP_PASSWORD)
 
       .expect(303)

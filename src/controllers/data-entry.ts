@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
-import { validationResult, body } from "express-validator";
 import { postRedirectGet } from "../utils";
 
-enum InputName {
-  inputA = "input-a",
+export enum DataEntryInputName {
+  inputA = "inputA",
 }
 
+/**
+ *
+ */
 export default {
   /**
-   * Render the home page form with current form data or errors
+   * Render the data entry form with current form data or errors
    */
-  getHomeForm(req: Request, res: Response) {
-    res.render("home.njk", {
+  getDataEntryView(req: Request, res: Response) {
+    res.render("data-entry.njk", {
       formErrors: req.session.formErrors,
       formData: req.session.formData,
     });
@@ -24,13 +26,12 @@ export default {
    * Applies form validation then redirects to success page or back to previous step depending
    * upon result.
    */
-  handleFormSubmission: postRedirectGet({
+  postDataEntry: postRedirectGet({
     schema: {
-      [InputName.inputA]: {
+      [DataEntryInputName.inputA]: {
         isLength: {
           errorMessage:
             "Value is required and must be no more than 10 characters",
-
           options: {
             min: 1,
             max: 10,
@@ -44,10 +45,13 @@ export default {
 
   /**
    * Render a success page witht the users form data
+   *
    */
-  getSuccessHandler(req: Request, res: Response) {
+  getSuccessView(req: Request, res: Response) {
+    // TODO: Scenario should be handled so that view is not accessible
+    // when data entry has not been completed with an error notification or redirect.
     res.render("success.njk", {
-      inputValue: req.session.formData[InputName.inputA],
+      inputValue: req.session.formData[DataEntryInputName.inputA],
     });
   },
 };
