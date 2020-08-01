@@ -6,6 +6,7 @@ import nunjucks from "nunjucks";
 import basicAuth from "express-basic-auth";
 import session from "express-session";
 import bodyParser from "body-parser";
+import helmet from "helmet";
 
 // local dependencies
 import routes from "./routes";
@@ -20,6 +21,8 @@ nunjucks.configure(
     watch: process.env.NODE_ENV === "development",
   }
 );
+
+app.use(helmet());
 
 // Add basic auth for demo deployment purposes
 app.use(
