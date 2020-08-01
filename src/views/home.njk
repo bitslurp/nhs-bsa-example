@@ -1,0 +1,43 @@
+{% extends 'layout.njk' %}
+
+{% block pageTitle %}
+  Form Demo
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb({
+    href: "/",
+    text: "Home"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1>Want To Go On An Exciting Adventure?</h1>
+      
+      <p class="nhsuk-lede-text">Please fill in the following field:</p>
+      <form  method="POST">
+      {{ input({
+        "label": {
+          "text": "Enter a value"
+        },
+        "id": "input-a",
+        "name": "input-a",
+        "value": formData["input-a"],
+        "errorMessage": { "text": formErrors['input-a'].msg } if formErrors['input-a'] else null
+      }) }}
+
+      {{ button({
+        "text": "Continue"
+      }) }}
+
+      </form>
+
+
+    </div>
+
+  </div>
+{% endblock %}

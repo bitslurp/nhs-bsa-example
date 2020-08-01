@@ -1,0 +1,25 @@
+{% extends 'layout.njk' %}
+
+{% block pageTitle %}
+  Success
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb({
+    href: "/",
+    text: "Home"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="nhsuk-grid-row">
+
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1>Success</h1>
+
+      <p>Your input value was <strong>{{inputValue}}</strong>, have a nice day.</p>
+    </div>
+
+  </div>
+{% endblock %}
